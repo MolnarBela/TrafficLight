@@ -12,36 +12,45 @@ public class Traffic {
         int roads = getValidNumber(scanner);
         System.out.print("Input the interval: ");
         int interval = getValidNumber(scanner);
-        int menu;
+        String menu;
         do {
-
             System.out.println("Menu:\n" +
                     "1. Add\n" +
                     "2. Delete\n" +
                     "3. System\n" +
                     "0. Quit");
-            menu = scanner.nextInt();
+            menu = scanner.nextLine();
             printSelection(menu, scanner);
-            scanner.nextLine();
-        } while (menu != 0);
+
+        } while (!"0".equals(menu));
         System.out.println("Bye!");
     }
-    private void printSelection(int number, Scanner scanner) {
-        switch (number) {
-            case 1:
-                System.out.println("Road added");
-                break;
-            case 2:
-                System.out.println("Road deleted");
-                break;
-            case 3:
-                System.out.println("System opened");
-                break;
-            default:
-                System.out.println("Incorrect option");
-                scanner.nextLine();
-                clearTerminal();
-                break;
+    private void printSelection(String menu, Scanner scanner) {
+        int number = 0;
+        try {
+            number = Integer.parseInt(menu);
+        } catch (NumberFormatException e) {
+            System.out.print("Incorrect option");
+            scanner.nextLine();
+            clearTerminal();
+        }
+        if (number != 0) {
+            switch (number) {
+                case 1:
+                    System.out.print("Road added");
+                    break;
+                case 2:
+                    System.out.print("Road deleted");
+                    break;
+                case 3:
+                    System.out.print("System opened");
+                    break;
+                default:
+                    System.out.print("Incorrect option");
+                    break;
+            }
+            scanner.nextLine();
+            clearTerminal();
         }
     }
 
