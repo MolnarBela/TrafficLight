@@ -14,19 +14,19 @@ public class Traffic {
         int interval = getValidNumber(scanner);
         int menu;
         do {
-            clearTerminal();
+
             System.out.println("Menu:\n" +
                     "1. Add\n" +
                     "2. Delete\n" +
                     "3. System\n" +
                     "0. Quit");
             menu = scanner.nextInt();
-            printSelection(menu);
+            printSelection(menu, scanner);
             scanner.nextLine();
         } while (menu != 0);
         System.out.println("Bye!");
     }
-    private void printSelection(int number) {
+    private void printSelection(int number, Scanner scanner) {
         switch (number) {
             case 1:
                 System.out.println("Road added");
@@ -37,12 +37,17 @@ public class Traffic {
             case 3:
                 System.out.println("System opened");
                 break;
+            default:
+                System.out.println("Incorrect option");
+                scanner.nextLine();
+                clearTerminal();
+                break;
         }
     }
 
     private int getValidNumber(Scanner scanner) {
         int number = 0;
-        boolean notValide = false;
+        boolean notValide = true;
 
         do {
             String roadsString = scanner.nextLine();
@@ -55,7 +60,7 @@ public class Traffic {
             if (number < 1) {
                 System.out.print("Error! Incorrect Input. Try again: ");
             } else {
-                notValide = true;
+                notValide = false;
             }
         } while (notValide);
         return number;
