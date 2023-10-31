@@ -4,14 +4,24 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class Traffic {
+    QueueThread qThread;
+    private static SystemState state;
 
-    public void start() {
+    public static SystemState getState() {
+        return state;
+    }
+
+    public void initialize() {
+        state = SystemState.NOT_STARTED;
         Scanner scanner = new Scanner(System.in);
         System.out.println("Welcome to the traffic management system!");
         System.out.print("Input the number of roads: ");
         int roads = getValidNumber(scanner);
         System.out.print("Input the interval: ");
         int interval = getValidNumber(scanner);
+
+        qThread = new QueueThread(roads, interval);
+        qThread.start();
         String menu;
         do {
             System.out.println("Menu:\n" +
@@ -23,6 +33,7 @@ public class Traffic {
             printSelection(menu, scanner);
 
         } while (!"0".equals(menu));
+        qThread.setRunning(false);
         System.out.println("Bye!");
     }
     private void printSelection(String menu, Scanner scanner) {
@@ -36,20 +47,13 @@ public class Traffic {
         }
         if (number != 0) {
             switch (number) {
-                case 1:
-                    System.out.print("Road added");
-                    break;
-                case 2:
-                    System.out.print("Road deleted");
-                    break;
-                case 3:
-                    System.out.print("System opened");
-                    break;
-                default:
-                    System.out.print("Incorrect option");
-                    break;
+                case 1 -> System.out.print("Road added");
+                case 2 -> System.out.print("Road deleted");
+                case 3 -> state = SystemState.SYSTEM;
+                default -> System.out.print("Incorrect option");
             }
             scanner.nextLine();
+            state = SystemState.MENU;
             clearTerminal();
         }
     }
@@ -75,7 +79,7 @@ public class Traffic {
         return number;
     }
 
-    private void clearTerminal() {
+    public static void clearTerminal() {
         try {
             var clearCommand = System.getProperty("os.name").contains("Windows")
                     ? new ProcessBuilder("cmd", "/c", "cls")
