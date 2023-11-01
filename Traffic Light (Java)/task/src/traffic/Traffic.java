@@ -19,7 +19,6 @@ public class Traffic {
         int roads = getValidNumber(scanner);
         System.out.print("Input the interval: ");
         int interval = getValidNumber(scanner);
-
         qThread = new QueueThread(roads, interval);
         qThread.start();
         String menu;
@@ -47,10 +46,19 @@ public class Traffic {
         }
         if (number != 0) {
             switch (number) {
-                case 1 -> System.out.print("Road added");
-                case 2 -> System.out.print("Road deleted");
-                case 3 -> state = SystemState.SYSTEM;
-                default -> System.out.print("Incorrect option");
+                case 1:
+                    System.out.print("Input road name: ");
+                    String name = scanner.nextLine();
+                    qThread.addRoad(name);
+                    break;
+                case 2:
+                    qThread.deleteRoad();
+                    break;
+                case 3:
+                    state = SystemState.SYSTEM;
+                    break;
+                default:
+                    System.out.print("Incorrect option");
             }
             scanner.nextLine();
             state = SystemState.MENU;
